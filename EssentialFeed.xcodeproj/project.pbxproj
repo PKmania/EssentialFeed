@@ -42,6 +42,13 @@
 			);
 			target = 5D259D7E2D3C034400D6ACDD /* EssentialFeed */;
 		};
+		C6AF360A2D7F8A59000E6048 /* Exceptions for "EssentialFeedTests" folder in "EssentialFeedAPIEndToEndTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Helpers/XCTestCase+TrackMemoryLeakTracking.swift",
+			);
+			target = C6AF35FE2D7F8673000E6048 /* EssentialFeedAPIEndToEndTests */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -55,6 +62,9 @@
 		};
 		5D259D8B2D3C034400D6ACDD /* EssentialFeedTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				C6AF360A2D7F8A59000E6048 /* Exceptions for "EssentialFeedTests" folder in "EssentialFeedAPIEndToEndTests" target */,
+			);
 			path = EssentialFeedTests;
 			sourceTree = "<group>";
 		};
