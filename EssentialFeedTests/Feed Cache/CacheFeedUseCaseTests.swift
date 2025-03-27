@@ -16,7 +16,10 @@ class LocalFeedLoader {
         store.deleteCachedFeed {[weak self] (error) in
             guard let self = self else { return }
             if error == nil {
-                self.store.insert(items: items, timestamp: self.currentDate(), completion: completion)
+                self.store.insert(items: items, timestamp: self.currentDate()) { [weak self] (error) in
+                    guard self != nil else {return}
+                    completion(error)
+                }
             }else {
                 completion(error)
             }
@@ -99,6 +102,20 @@ class CacheFeedUseCaseTests: XCTestCase {
         XCTAssertTrue(receivedResult.isEmpty)
     }
     
+    func test_save_doesNotDeliverInsertionErrorAfterSUTInstanceHasBeenDeallocted() {
+        let store = FeedStoreSpy()
+        var sut: LocalFeedLoader? = LocalFeedLoader(store: store, currentDate: Date.init)
+        var receivedResult = [Error?]()
+        sut?.save([uniqueItem()], completion: { (error) in
+            receivedResult.append(error)
+        })
+        store.completeDeletionSuccessfully()
+        sut = nil
+        store.completeInsertion(with: anyNSError())
+        XCTAssertTrue(receivedResult.isEmpty)
+    }
+    
+    
     //MARK: - Helpers
     private func expect(_ sut: LocalFeedLoader, toCompleteWithError expectedError: NSError?, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
         let exp = expectation(description: "Wait for save completion")
@@ -161,6 +178,6 @@ class CacheFeedUseCaseTests: XCTestCase {
     }
     
     private func anyNSError() -> NSError {
-      return NSError(domain: "any error", code: 0)
+        return NSError(domain: "any error", code: 0)
     }
 }
