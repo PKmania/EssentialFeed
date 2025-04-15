@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23605" systemVersion="24D70" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
+    <entity name="ManagedCacheImage" representedClassName="ManagedCacheImage" syncable="YES">
+        <attribute name="id"/>
+        <attribute name="imageDescription" optional="YES" attributeType="String"/>
+        <attribute name="location" optional="YES" attributeType="String"/>
+        <attribute name="url" attributeType="URI"/>
+        <relationship name="cache" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagesCache" inverseName="feed" inverseEntity="ManagesCache"/>
+    </entity>
+    <entity name="ManagesCache" representedClassName="ManagesCache" syncable="YES">
+        <attribute name="timestamp" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="feed" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="ManagedCacheImage" inverseName="cache" inverseEntity="ManagedCacheImage"/>
+    </entity>
+</model>
