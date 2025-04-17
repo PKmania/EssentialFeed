@@ -9,12 +9,12 @@ public final class CoreDataFeedStore: FeedStore {
     private let container: NSPersistentContainer
     
     private let context: NSManagedObjectContext
-
+    
     public init(storeURL: URL, bundle: Bundle = .main) throws {
         container = try NSPersistentContainer.load(modelName: "FeedStore", url: storeURL, in: bundle)
-            context = container.newBackgroundContext()
-
-        }
+        context = container.newBackgroundContext()
+        
+    }
     
     public func retrieve(completion: @escaping RetrievalCompletion) {
         let context = self.context
@@ -29,7 +29,7 @@ public final class CoreDataFeedStore: FeedStore {
                 completion(.failure(error))
             }
         }    }
-
+    
     public func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
         let context = self.context
         context.perform {
@@ -44,11 +44,18 @@ public final class CoreDataFeedStore: FeedStore {
             }
         }
     }
-
+    
     public func deleteCachedFeed(completion: @escaping DeletionCompletion) {
-        completion(nil)
+        let context = self.context
+        context.perform {
+            do {
+                try ManagedCache.find(in: context).map(context.delete).map(context.save)
+                completion(nil)
+            } catch {
+                completion(error)
+            }
+        }
     }
-
 }
 
 private extension NSPersistentContainer {
@@ -56,20 +63,20 @@ private extension NSPersistentContainer {
         case modelNotFound
         case failedToLoadPersistentStores(Swift.Error)
     }
-
+    
     static func load(modelName name: String, url: URL, in bundle: Bundle) throws -> NSPersistentContainer {
         guard let model = NSManagedObjectModel.with(name: name, in: bundle) else {
             throw LoadingError.modelNotFound
         }
         let description = NSPersistentStoreDescription(url: url)
-
+        
         let container = NSPersistentContainer(name: name, managedObjectModel: model)
         container.persistentStoreDescriptions = [description]
-
+        
         var loadError: Swift.Error?
         container.loadPersistentStores { loadError = $1 }
         try loadError.map { throw LoadingError.failedToLoadPersistentStores($0) }
-
+        
         return container
     }
 }
@@ -88,17 +95,17 @@ private class ManagedCache: NSManagedObject {
     @NSManaged var feed: NSOrderedSet
     
     var localFeed: [LocalFeedImage] {
-            return feed.compactMap { ($0 as? ManagedFeedImage)?.local }
-        }
+        return feed.compactMap { ($0 as? ManagedFeedImage)?.local }
+    }
     static func newUniqueInstance(in context: NSManagedObjectContext) throws -> ManagedCache {
-            try find(in: context).map(context.delete)
-            return ManagedCache(context: context)
-        }
+        try find(in: context).map(context.delete)
+        return ManagedCache(context: context)
+    }
     static func find(in context: NSManagedObjectContext) throws -> ManagedCache? {
-            let request = NSFetchRequest<ManagedCache>(entityName: entity().name!)
-            request.returnsObjectsAsFaults = false
-            return try context.fetch(request).first
-        }
+        let request = NSFetchRequest<ManagedCache>(entityName: entity().name!)
+        request.returnsObjectsAsFaults = false
+        return try context.fetch(request).first
+    }
 }
 @objc(ManagedFeedImage)
 private class ManagedFeedImage: NSManagedObject {
@@ -118,7 +125,7 @@ private class ManagedFeedImage: NSManagedObject {
             return managed
         })
     }
-
+    
     var local: LocalFeedImage {
         return LocalFeedImage(id: id, description: imageDescription, location: location, url: url)
     }
