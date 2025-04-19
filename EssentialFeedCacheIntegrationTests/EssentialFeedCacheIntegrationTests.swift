@@ -70,6 +70,8 @@ class EssentialFeedCacheIntegrationTests: XCTestCase {
 
                 case let .failure(error):
                     XCTFail("Expected successful feed result, got \(error) instead", file: file, line: line)
+                default:
+                  XCTFail("Expected success, got \(result) instead.", file: file, line: line)
                 }
 
                 exp.fulfill()
