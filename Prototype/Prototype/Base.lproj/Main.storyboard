@@ -100,7 +100,7 @@ Location</string>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="descriptionLabel" destination="cyJ-eZ-wVJ" id="VIr-Y7-Ncd"/>
-                                    <outlet property="feedImage" destination="plV-Wd-4js" id="EW1-ka-OSH"/>
+                                    <outlet property="feedImageView" destination="plV-Wd-4js" id="9S0-z3-qFO"/>
                                     <outlet property="locationContainer" destination="tlh-oh-yrp" id="gvl-xT-nOy"/>
                                     <outlet property="locationLabel" destination="OE3-9X-xjl" id="FzD-t5-EZY"/>
                                 </connections>
