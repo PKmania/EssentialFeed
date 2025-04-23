@@ -16,7 +16,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="FeedImageCell" rowHeight="580" id="4RA-j8-gVM">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="FeedImageCell" rowHeight="580" id="4RA-j8-gVM" customClass="FeedImageCell" customModule="Prototype" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="50" width="393" height="580"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="4RA-j8-gVM" id="R1i-6C-h6k">
@@ -99,6 +99,12 @@ Location</string>
                                         <constraint firstItem="nmA-5m-729" firstAttribute="top" secondItem="R1i-6C-h6k" secondAttribute="topMargin" priority="999" constant="6" id="lc9-ga-yyB"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="descriptionLabel" destination="cyJ-eZ-wVJ" id="VIr-Y7-Ncd"/>
+                                    <outlet property="feedImage" destination="plV-Wd-4js" id="EW1-ka-OSH"/>
+                                    <outlet property="locationContainer" destination="tlh-oh-yrp" id="gvl-xT-nOy"/>
+                                    <outlet property="locationLabel" destination="OE3-9X-xjl" id="FzD-t5-EZY"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
