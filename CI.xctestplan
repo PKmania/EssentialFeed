@@ -9,9 +9,30 @@
     }
   ],
   "defaultOptions" : {
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:EssentialFeed.xcodeproj",
+          "identifier" : "5D259D7E2D3C034400D6ACDD",
+          "name" : "EssentialFeed"
+        },
+        {
+          "containerPath" : "container:EssentialFeed.xcodeproj",
+          "identifier" : "5D3185072DBA11ED0031119E",
+          "name" : "EssentialFeedIOS"
+        }
+      ]
+    },
     "threadSanitizerEnabled" : true
   },
   "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:EssentialFeed.xcodeproj",
+        "identifier" : "5D259D862D3C034400D6ACDD",
+        "name" : "EssentialFeedTests"
+      }
+    },
     {
       "target" : {
         "containerPath" : "container:EssentialFeed.xcodeproj",
@@ -22,15 +43,15 @@
     {
       "target" : {
         "containerPath" : "container:EssentialFeed.xcodeproj",
-        "identifier" : "C6AF35FE2D7F8673000E6048",
-        "name" : "EssentialFeedAPIEndToEndTests"
+        "identifier" : "5D31850E2DBA11ED0031119E",
+        "name" : "EssentialFeedIOSTests"
       }
     },
     {
       "target" : {
         "containerPath" : "container:EssentialFeed.xcodeproj",
-        "identifier" : "5D259D862D3C034400D6ACDD",
-        "name" : "EssentialFeedTests"
+        "identifier" : "C6AF35FE2D7F8673000E6048",
+        "name" : "EssentialFeedAPIEndToEndTests"
       }
     }
   ],
