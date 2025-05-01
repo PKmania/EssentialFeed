@@ -16,7 +16,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "68"
             endingLineNumber = "68"
-            landmarkName = "test_viewDidLoad_showLoadingIndicator()"
+            landmarkName = "test_loadingFeedIndicator_isVisibleWhileLoadingFeed()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
