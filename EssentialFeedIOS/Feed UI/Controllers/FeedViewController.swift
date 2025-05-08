@@ -6,7 +6,7 @@ import EssentialFeed
 import UIKit
 
 
-final public class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching {
+public final class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching {
   private var feedLoader: FeedLoader?
   private var imageLoader: FeedImageDataLoader?
   private var tasks = [IndexPath: FeedImageDataLoaderTask]()
