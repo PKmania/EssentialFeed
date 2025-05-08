@@ -12,13 +12,13 @@ extension FeedViewController {
   }
   
   func replaceRefreshControlWithFakeForIOS17Support() {
-    let fake = FakeRefrehControl()
-    refreshControl?.allTargets.forEach({ target in
-      refreshControl?.actions(forTarget: target, forControlEvent: .valueChanged)?.forEach({ action in
+    let fake = FakeRefreshControl()
+    refreshController?.view.allTargets.forEach({ target in
+      refreshController?.view.actions(forTarget: target, forControlEvent: .valueChanged)?.forEach({ action in
         fake.addTarget(target, action: Selector(action), for: .valueChanged)
       })
     })
-    refreshControl = fake
+    refreshController?.view = fake
     self.beginAppearanceTransition(true, animated: false)
     self.endAppearanceTransition()
   }
