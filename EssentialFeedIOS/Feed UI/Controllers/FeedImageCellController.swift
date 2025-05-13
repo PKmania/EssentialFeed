@@ -21,6 +21,9 @@ final class FeedImageCellController: FeedImageView {
   }
   func view(in tableView: UITableView) -> UITableViewCell {
     cell = tableView.dequeReuseableCell()
+    cell?.onReuse = { [weak self] in
+          self?.releaseCellForReuse()
+        }
     delegate.didRequestImage()
     return cell!
   }
