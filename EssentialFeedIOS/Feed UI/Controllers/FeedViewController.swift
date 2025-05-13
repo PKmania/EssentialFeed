@@ -48,7 +48,7 @@ public final class FeedViewController: UITableViewController, UITableViewDataSou
     return tableModel.count
   }
   public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    return cellController(forRowAt: indexPath).view()
+    return cellController(forRowAt: indexPath).view(in: tableView)
   }
   public override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
     cancelCellControllerLoad(forRowAt: indexPath)
