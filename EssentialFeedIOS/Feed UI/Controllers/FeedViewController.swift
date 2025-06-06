@@ -5,15 +5,15 @@
 import UIKit
 
 protocol FeedViewControllerDelegate {
-    func didRequestFeedRefresh()
+  func didRequestFeedRefresh()
 }
 
-public final class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching, FeedLoadingView {
+public final class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching {
   
   private var onViewIsAppearing: ((FeedViewController) -> Void)?
   
   @IBOutlet private(set) public var errorView: ErrorView?
-
+  
   var tableModel = [FeedImageCellController]() {
     didSet {
       tableView.reloadData()
@@ -24,7 +24,7 @@ public final class FeedViewController: UITableViewController, UITableViewDataSou
   public override func viewDidLoad() {
     super.viewDidLoad()
     onViewIsAppearing = { vc in
-     
+      
       vc.refresh()
       vc.onViewIsAppearing = nil
       vc.setUpTableViewFooter()
@@ -33,17 +33,9 @@ public final class FeedViewController: UITableViewController, UITableViewDataSou
     
   }
   
-  func display(_ viewModel: FeedLoadingViewModel) {
-        if viewModel.isLoading {
-            refreshControl?.beginRefreshing()
-        } else {
-            refreshControl?.endRefreshing()
-        }
-    }
-    
-    @IBAction private func refresh() {
-        delegate?.didRequestFeedRefresh()
-    }
+  @IBAction private func refresh() {
+    delegate?.didRequestFeedRefresh()
+  }
   
   public override func viewIsAppearing(_ animated: Bool) {
     super.viewIsAppearing(animated)
@@ -54,7 +46,7 @@ public final class FeedViewController: UITableViewController, UITableViewDataSou
   }
   public override func viewDidLayoutSubviews() {
     super.viewDidLayoutSubviews()
-
+    
     tableView.sizeTableHeaderToFit()
   }
   
@@ -78,10 +70,15 @@ public final class FeedViewController: UITableViewController, UITableViewDataSou
   
   private func cellController(forRowAt indexPath: IndexPath) -> FeedImageCellController {
     return tableModel[indexPath.item]
-
+    
   }
   private func cancelCellControllerLoad(forRowAt indexPath: IndexPath) {
     cellController(forRowAt: indexPath).cancelLoad()
+  }
+}
+extension FeedViewController: FeedLoadingView {
+  func display(_ viewModel: FeedLoadingViewModel) {
+    refreshControl?.update(isRefreshing: viewModel.isLoading)
   }
 }
 
