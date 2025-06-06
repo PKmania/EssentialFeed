@@ -5,10 +5,14 @@
 import UIKit
 
 public final class ErrorView: UIView {
-  @IBOutlet private var label: UILabel!
-  
+  @IBOutlet private(set) public var label: UILabel!
+
   public var message: String? {
-    get { return isVisible ? label.text : nil }
+    get {
+      debugPrint("isVisible===\(isVisible)")
+
+      return isVisible ? label.text : nil
+    }
     set { setMessageAnimated(newValue) }
   }
   
@@ -39,7 +43,7 @@ public final class ErrorView: UIView {
     }
   }
   
-  @IBAction private func hideMessageAnimated() {
+  @IBAction func hideMessageAnimated() {
     UIView.animate(
       withDuration: 0.25,
       animations: { self.alpha = 0 },

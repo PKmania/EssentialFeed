@@ -24,8 +24,10 @@ public final class FeedViewController: UITableViewController, UITableViewDataSou
   public override func viewDidLoad() {
     super.viewDidLoad()
     onViewIsAppearing = { vc in
-      vc.onViewIsAppearing = nil
+     
       vc.refresh()
+      vc.onViewIsAppearing = nil
+      vc.setUpTableViewFooter()
     }
     refresh()
     
@@ -47,7 +49,14 @@ public final class FeedViewController: UITableViewController, UITableViewDataSou
     super.viewIsAppearing(animated)
     onViewIsAppearing?(self)
   }
+  private func setUpTableViewFooter() {
+    tableView.tableFooterView = .none
+  }
+  public override func viewDidLayoutSubviews() {
+    super.viewDidLayoutSubviews()
 
+    tableView.sizeTableHeaderToFit()
+  }
   
   public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return tableModel.count
