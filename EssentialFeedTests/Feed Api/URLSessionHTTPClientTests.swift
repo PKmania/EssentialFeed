@@ -26,7 +26,9 @@ class URLSessionHTTPClientTests: XCTestCase {
   }
   
   func test_cancelGetFromURLTask_cancelsURLRequest() {
-    let receivedError = resultErrorFor(taskHandler: { $0.cancel() }) as NSError?
+    var task: HTTPClientTask?
+    URLProtocolStub.onStartLoading { task?.cancel() }
+    let receivedError = resultErrorFor(taskHandler: { task = $0 }) as NSError?
     
     XCTAssertEqual(receivedError?.code, URLError.cancelled.rawValue)
   }
@@ -78,10 +80,10 @@ class URLSessionHTTPClientTests: XCTestCase {
   
   private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> HTTPClient {
     let configuration = URLSessionConfiguration.ephemeral
-        configuration.protocolClasses = [URLProtocolStub.self]
-        let session = URLSession(configuration: configuration)
-
-        let sut = URLSessionHTTPClient(session: session)
+    configuration.protocolClasses = [URLProtocolStub.self]
+    let session = URLSession(configuration: configuration)
+    
+    let sut = URLSessionHTTPClient(session: session)
     trackForMemoryLeaks(sut, file: file, line: line)
     return sut
   }
