@@ -24,7 +24,7 @@ class FeedImageDataLoaderWithFallbackComposite: FeedImageDataLoader {
     _ = primary.loadImageData(from: url) { [weak self] result in
       switch result {
       case .success:
-        break
+        completion(result)
         
       case .failure:
         _ = self?.fallback.loadImageData(from: url) { _ in }
@@ -66,6 +66,16 @@ class FeedImageDataLoaderWithFallbackCompositeTests: XCTestCase {
     XCTAssertEqual(primaryLoader.loadedURLs, [url], "Expected to load URL from primary loader")
     XCTAssertEqual(fallbackLoader.loadedURLs, [url], "Expected to load URL from fallback loader")
   }
+  
+  func test_loadImageData_deliversPrimaryDataOnPrimaryLoaderSuccess() {
+    let primaryData = anyData()
+    let (sut, primaryLoader, _) = makeSUT()
+    
+    expect(sut, toCompleteWith: .success(primaryData), when: {
+      primaryLoader.complete(with: primaryData)
+    })
+  }
+  
   // MARK: - Helpers
   
   
@@ -78,6 +88,34 @@ class FeedImageDataLoaderWithFallbackCompositeTests: XCTestCase {
     trackForMemoryLeaks(sut, file: file, line: line)
     return (sut, primaryLoader, fallbackLoader)
   }
+  
+  private func expect(_ sut: FeedImageDataLoader, toCompleteWith expectedResult: FeedImageDataLoader.Result, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
+    let exp = expectation(description: "Wait for load completion")
+    
+    _ = sut.loadImageData(from: anyURL()) { receivedResult in
+      switch (receivedResult, expectedResult) {
+      case let (.success(receivedFeed), .success(expectedFeed)):
+        XCTAssertEqual(receivedFeed, expectedFeed, file: file, line: line)
+        
+      case (.failure, .failure):
+        break
+        
+      default:
+        XCTFail("Expected \(expectedResult), got \(receivedResult) instead", file: file, line: line)
+      }
+      
+      exp.fulfill()
+    }
+    
+    action()
+    
+    wait(for: [exp], timeout: 1.0)
+  }
+  
+  func anyData() -> Data {
+    return Data("any data".utf8)
+  }
+  
   
   private func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #file, line: UInt = #line) {
     addTeardownBlock { [weak instance] in
@@ -108,6 +146,10 @@ class FeedImageDataLoaderWithFallbackCompositeTests: XCTestCase {
     }
     func complete(with error: Error, at index: Int = 0) {
       messages[index].completion(.failure(error))
+    }
+    
+    func complete(with data: Data, at index: Int = 0) {
+      messages[index].completion(.success(data))
     }
   }
   
